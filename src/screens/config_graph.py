@@ -31,8 +31,13 @@ class ConfigGraph:
 
     def fill_matrix(self, range=10, sender=None, app_data=None, user_data=None):
         for input_id in self.input_ids:
-            random_value = random.randint(0, range)
-            dpg.set_value(input_id, random_value)
+            label = dpg.get_item_label(input_id).replace("(", "").replace(")", "")
+            node = label.split(',')
+
+            #verificamos que no sea reflexia
+            if node[0]!=node[1]:
+                random_value = random.randint(0, range)
+                dpg.set_value(input_id, random_value)
         
         self.update_preview()
     
