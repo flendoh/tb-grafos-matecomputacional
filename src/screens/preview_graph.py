@@ -49,19 +49,18 @@ class PreviewGraph:
         matplotlib.use('Agg')
 
         pos = nx.spring_layout(self.graph, seed=self.seed)
-        plt.figure(figsize=(8, 5))
+        plt.figure(figsize=(9, 5))
 
-        nx.draw(self.graph, pos, with_labels=True, node_color='skyblue', node_size=700, edge_color='gray')
+        nx.draw(self.graph, pos, with_labels=True, node_color='skyblue', node_size=500, edge_color='gray')
         labels = nx.get_edge_attributes(self.graph, 'weight')
         nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
-
         
         if start_node!=end_node and 0<=start_node<len(self.matrix) and 0<=end_node<len(self.matrix):
             self.shortest_path = nx.shortest_path(self.graph, source=start_node, target=end_node, weight='weight')
             #Resaltar el camino más corto en otro color
             path_edges = list(zip(self.shortest_path, self.shortest_path[1:]))
             nx.draw_networkx_edges(self.graph, pos, edgelist=path_edges, edge_color='red', width=2)
-            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=700)
+            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=500)
         else:
             self.shortest_path = None
 
@@ -90,5 +89,5 @@ class PreviewGraph:
         
 
     def display_graph(self):
-        with dpg.window(label="Grafo asociado a la matriz", width=700, height=600) as self.parent:
+        with dpg.window(label="Grafo asociado a la matriz", width=900, height=550) as self.parent:
             self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
