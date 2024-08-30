@@ -1,7 +1,7 @@
 import dearpygui.dearpygui as dpg
 
 class App:
-    def __init__(self, title="TB MateComputacional", width=1280, height=720):
+    def __init__(self, title="TB MateComputacional", width=1480, height=820):
         self.title = title
         self.width = width
         self.height = height
