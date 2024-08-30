@@ -79,7 +79,7 @@ class PreviewGraph:
         tag = self.load_img(path)
 
         if self.shortest_path:
-            dpg.set_value(self.text_info, f"Elementos del grafo:\n{str(self.graph.edges)}\nCamino más corte de {start_node} a {end_node}:\n {self.shortest_path}")
+            dpg.set_value(self.text_info, f"Elementos del grafo:\n{str(self.graph.edges)}\nCamino más corto de {start_node} a {end_node}:\n {self.shortest_path}")
         else:
             dpg.set_value(self.text_info, f"Elementos del grafo:\n{str(self.graph.edges)}")
 

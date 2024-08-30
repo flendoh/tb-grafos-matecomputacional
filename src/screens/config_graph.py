@@ -29,16 +29,31 @@ class ConfigGraph:
     def update_preview(self):
         self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node))
 
-    def fill_matrix(self, range=10, sender=None, app_data=None, user_data=None):
+    def clear_matrix(self):
         for input_id in self.input_ids:
+            dpg.set_value(input_id, 0)
+
+    def fill_matrix(self):
+        self.clear_matrix()
+        size = dpg.get_value(self.size_array)
+        t = ((size**2)-size)/2
+        current_fill = 0
+        while(current_fill<t):
+            input_id = random.choice(self.input_ids) #seleccionamos aleatoriamente un elemento de los inputs
             label = dpg.get_item_label(input_id).replace("(", "").replace(")", "")
             node = label.split(',')
 
-            #verificamos que no sea reflexia
-            if node[0]!=node[1]:
-                random_value = random.randint(0, range)
+            inverse_label = f"({node[1]},{node[0]})"
+
+            inverse_id = next((current for current in self.input_ids if dpg.get_item_label(current) == inverse_label), None)
+
+            #verificamos que no sea reflexia y sea antisimetrica
+            if node[0]!=node[1] and dpg.get_value(input_id) == 0 and dpg.get_value(inverse_id) == 0:
+                random_value = random.randint(0, 10)
                 dpg.set_value(input_id, random_value)
-        
+                current_fill+=1
+
+
         self.update_preview()
     
     def get_matrix(self):
