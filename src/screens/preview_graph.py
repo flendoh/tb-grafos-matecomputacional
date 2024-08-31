@@ -8,7 +8,6 @@ class PreviewGraph:
     def __init__(self):
         self.matrix = None
         self.graph = nx.Graph()
-        self.seed = 100
         self.parent = None
         self.image = None
         self.text_info = None
@@ -44,14 +43,14 @@ class PreviewGraph:
         
         return texture_tag       
     
-    def save_img(self, start_node=0, end_node=0):
+    def save_img(self, start_node=0, end_node=0, node_size=500, graph_seed=100):
         import matplotlib
         matplotlib.use('Agg')
 
-        pos = nx.spring_layout(self.graph, seed=self.seed)
+        pos = nx.spring_layout(self.graph, seed=graph_seed)
         plt.figure(figsize=(9, 5))
 
-        nx.draw(self.graph, pos, with_labels=True, node_color='skyblue', node_size=500, edge_color='gray')
+        nx.draw(self.graph, pos, with_labels=True, node_color='skyblue', node_size=node_size, edge_color='gray')
         labels = nx.get_edge_attributes(self.graph, 'weight')
         nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
         
@@ -60,7 +59,7 @@ class PreviewGraph:
             #Resaltar el camino más corto en otro color
             path_edges = list(zip(self.shortest_path, self.shortest_path[1:]))
             nx.draw_networkx_edges(self.graph, pos, edgelist=path_edges, edge_color='red', width=2)
-            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=500)
+            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=node_size)
         else:
             self.shortest_path = None
 
@@ -71,10 +70,10 @@ class PreviewGraph:
         return image_path
 
     
-    def update(self, matrix, start_node, end_node):
+    def update(self, matrix, start_node=0, end_node=0, node_size=500, graph_seed=100):
         self.matrix = matrix
         self.add_nodes_and_edges()
-        path = self.save_img(start_node, end_node)
+        path = self.save_img(start_node, end_node, node_size, graph_seed)
         tag = self.load_img(path)
 
         if self.shortest_path:

@@ -8,6 +8,8 @@ class ConfigGraph:
         self.preview_window = PreviewGraph()
         self.start_node = None
         self.end_node = None
+        self.node_size = None
+        self.graph_seed = None
 
     def create_matrix(self, sender=None, app_data=None, user_data=None):
         size = dpg.get_value(self.size_array)
@@ -27,7 +29,7 @@ class ConfigGraph:
                     self.input_ids.append(input_id)
 
     def update_preview(self):
-        self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node))
+        self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
 
     def clear_matrix(self):
         for input_id in self.input_ids:
@@ -36,8 +38,9 @@ class ConfigGraph:
     def fill_matrix(self):
         self.clear_matrix()
         size = dpg.get_value(self.size_array)
-        t = ((size**2)-size)/2
+        max_range = ((size**2)-size)/2
         current_fill = 0
+        t = random.randint(1, int(max_range))
         while(current_fill<t):
             input_id = random.choice(self.input_ids) #seleccionamos aleatoriamente un elemento de los inputs
             label = dpg.get_item_label(input_id).replace("(", "").replace(")", "")
@@ -49,12 +52,20 @@ class ConfigGraph:
 
             #verificamos que no sea reflexia y sea antisimetrica
             if node[0]!=node[1] and dpg.get_value(input_id) == 0 and dpg.get_value(inverse_id) == 0:
-                random_value = random.randint(0, 10)
+                random_value = random.randint(1, 10)
                 dpg.set_value(input_id, random_value)
                 current_fill+=1
 
-
         self.update_preview()
+    
+    def gen_random_matrix(self):
+        min_range = 8
+        max_range = 16
+
+        random_size = random.randint(min_range, max_range)
+        dpg.set_value(self.size_array, random_size)
+        self.create_matrix()
+        self.fill_matrix()
     
     def get_matrix(self):
         size = dpg.get_value(self.size_array)
@@ -70,15 +81,24 @@ class ConfigGraph:
 
     def create(self):
         with dpg.window(label="Configuración", width=400, height=500) as main_window:
-            dpg.add_text("Config Matriz")
-            self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
+            #CONFIGURACION MATRIZ
+            dpg.add_button(label="Generar una Matriz aleatoria de tamaño n*n [8<=n<=16]", callback=self.gen_random_matrix)
             dpg.add_text("Matriz")
-            dpg.add_button(label="Rellenar Matriz Aleatoriamente", callback=self.fill_matrix)
+            self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
+            dpg.add_text("Elementos")
 
-        self.create_matrix(user_data=main_window)
-        self.preview_window.create(matrix=self.get_matrix())
+            #MATRIZ
+            self.create_matrix(user_data=main_window)
+            self.preview_window.create(matrix=self.get_matrix())
 
-        dpg.add_text("Encontrar el camino mínimo entre dos nodos (Dijkstra)", parent=main_window)
-        
-        self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, parent=main_window, callback=self.update_preview)
-        self.end_node = dpg.add_input_int(label="Nodo Final", width=100, parent=main_window, callback=self.update_preview)
+            #CAMINO CORTO
+            dpg.add_text("Encontrar el camino mínimo entre dos nodos (Dijkstra)")
+            self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_preview)
+            dpg.add_same_line()
+            self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_preview, )
+
+            #CONFIGRUACION DISEÑO DEL GRAFO
+            dpg.add_text("Diseño del Grafo")
+
+            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_preview)
+            self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_preview)
