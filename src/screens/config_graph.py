@@ -1,6 +1,7 @@
 import dearpygui.dearpygui as dpg
 from .preview_graph import PreviewGraph
 import random
+import time
 class ConfigGraph:
     def __init__(self):
         self.size_array = None
@@ -48,13 +49,18 @@ class ConfigGraph:
 
             inverse_label = f"({node[1]},{node[0]})"
 
-            inverse_id = next((current for current in self.input_ids if dpg.get_item_label(current) == inverse_label), None)
+            reverse_input_id = next((current for current in self.input_ids if dpg.get_item_label(current) == inverse_label), None)
 
-            #verificamos que no sea reflexia y sea antisimetrica
-            if node[0]!=node[1] and dpg.get_value(input_id) == 0 and dpg.get_value(inverse_id) == 0:
+            #verificamos que no sea reflexia y sea simetrica
+            if node[0]!=node[1] and dpg.get_value(input_id) == 0 and dpg.get_value(reverse_input_id) == 0:
                 random_value = random.randint(1, 10)
                 dpg.set_value(input_id, random_value)
+                dpg.set_value(reverse_input_id, random_value)
                 current_fill+=1
+
+                #self.update_preview()
+                #time.sleep(0.01)  # 0.01 segundos de delay
+
 
         self.update_preview()
     
@@ -94,7 +100,7 @@ class ConfigGraph:
             #CAMINO CORTO
             dpg.add_text("Encontrar el camino mínimo entre dos nodos (Dijkstra)")
             self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_preview)
-            dpg.add_same_line()
+            #dpg.add_same_line()
             self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_preview, )
 
             #CONFIGRUACION DISEÑO DEL GRAFO

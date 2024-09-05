@@ -1,7 +1,10 @@
 import dearpygui.dearpygui as dpg
+from screens.config_graph import ConfigGraph
+from screens.credits import Credits
+from screens.instructions import Instructions
 
 class App:
-    def __init__(self, title="TB MateComputacional", width=1480, height=820):
+    def __init__(self, title="Problema del camino minimo", width=1480, height=820):
         self.title = title
         self.width = width
         self.height = height
@@ -38,14 +41,19 @@ class App:
         dpg.start_dearpygui()
         dpg.destroy_context()
 
+    def create_menu(self):
+        with dpg.window(label="Menú", no_close=True, no_resize=True):
+            dpg.add_button(label="Generar Grafo", width=200, callback=lambda: self.add_screen(ConfigGraph()))
+            dpg.add_button(label="Instrucciones", width=200, callback=lambda: self.add_screen(Instructions()))
+            dpg.add_button(label="Credítos", width=200, callback=lambda: self.add_screen(Credits()))
+            dpg.add_button(label="Salir", width=200, callback=dpg.stop_dearpygui)
+
     def add_screen(self, screen):
         screen.create()
 
 if __name__ == "__main__":
-    from screens.config_graph import ConfigGraph
     app = App()
-    config_screen = ConfigGraph()
-    app.add_screen(config_screen)
+    app.create_menu()
     app.run()
 
 

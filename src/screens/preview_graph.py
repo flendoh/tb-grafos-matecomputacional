@@ -64,7 +64,7 @@ class PreviewGraph:
             self.shortest_path = None
 
         image_path = self.file_path()
-        plt.savefig(image_path)
+        plt.savefig(image_path, transparent=True)
         plt.close()
 
         return image_path
