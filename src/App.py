@@ -3,6 +3,15 @@ from screens.config_graph import ConfigGraph
 from screens.credits import Credits
 from screens.instructions import Instructions
 import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class App:
     def __init__(self, title="Problema del camino minimo", width=1480, height=820):
@@ -36,14 +45,12 @@ class App:
                 # Establecer colores de bordes
                 dpg.add_theme_color(dpg.mvThemeCol_Border, (0, 0, 0, 0))  # Color del borde
                 dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, (0, 0, 0, 0))  # Sombra del borde
-        try:
-            with dpg.font_registry():
-                path_file = os.path.join(os.path.dirname(__file__), 'assets', 'fonts', 'LibreFranklin-Thin.ttf')
-                default_font = dpg.add_font(path_file, 15)
-            dpg.bind_font(default_font)
-        except Exception as error:
-            print(error)
 
+        with dpg.font_registry():
+            font_path = resource_path(os.path.join(os.path.dirname(__file__),'assets', 'fonts', 'LibreFranklin-Thin.ttf'))
+            default_font = dpg.add_font(font_path, 15)
+            
+        dpg.bind_font(default_font)
         dpg.bind_theme(global_theme)
 
     def run(self):
