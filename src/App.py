@@ -10,7 +10,10 @@ class App:
         self.height = height
         dpg.create_context()
         dpg.create_viewport(title=self.title, width=self.width, height=self.height)
-        self.apply_styles()
+        try:
+            self.apply_styles()
+        except:
+            pass
         dpg.setup_dearpygui()
     
     def apply_styles(self):
@@ -31,9 +34,13 @@ class App:
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, (110, 110, 110, 255))  # Fondo del botón activo
 
                 # Establecer colores de bordes
-                dpg.add_theme_color(dpg.mvThemeCol_Border, (128, 128, 128, 255))  # Color del borde
+                dpg.add_theme_color(dpg.mvThemeCol_Border, (0, 0, 0, 0))  # Color del borde
                 dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, (0, 0, 0, 0))  # Sombra del borde
 
+        with dpg.font_registry():
+            default_font = dpg.add_font("./src/assets/fonts/LibreFranklin-Thin.ttf", 15)
+
+        dpg.bind_font(default_font)
         dpg.bind_theme(global_theme)
 
     def run(self):
