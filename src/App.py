@@ -47,7 +47,7 @@ class App:
                 dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, (0, 0, 0, 0))  # Sombra del borde
 
         with dpg.font_registry():
-            font_path = resource_path(os.path.join(os.path.dirname(__file__),'assets', 'fonts', 'LibreFranklin-Thin.ttf'))
+            font_path = resource_path(os.path.join(os.path.dirname(__file__), 'assets', 'fonts', 'LibreFranklin-Thin.ttf'))
             default_font = dpg.add_font(font_path, 15)
             
         dpg.bind_font(default_font)
