@@ -5,8 +5,8 @@ class Instructions:
         pass
 
     def create(self):
-        with dpg.window(label="Instrucciones"):
-            dpg.add_text("""Enunciado: Problema del camino mínimo
+        with dpg.window(label="Enunciado"):
+            dpg.add_text("""Problema del camino mínimo
 Dado 𝑛 ∈ [8, 16] ingresado por el usuario, el programa debe generar aleatoriamente
 una matriz simétrica 𝑛 × 𝑛 (con elementos positivos) o solicitar el ingreso de cada
 elemento de la matriz (según decisión del usuario). Además, debe mostrar el grafo

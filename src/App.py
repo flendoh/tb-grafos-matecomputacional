@@ -51,7 +51,7 @@ class App:
     def create_menu(self):
         with dpg.window(label="Menú", no_close=True, no_resize=True):
             dpg.add_button(label="Generar Grafo", width=200, callback=lambda: self.add_screen(ConfigGraph()))
-            dpg.add_button(label="Instrucciones", width=200, callback=lambda: self.add_screen(Instructions()))
+            dpg.add_button(label="Enunciado", width=200, callback=lambda: self.add_screen(Instructions()))
             dpg.add_button(label="Credítos", width=200, callback=lambda: self.add_screen(Credits()))
             dpg.add_button(label="Salir", width=200, callback=dpg.stop_dearpygui)
 

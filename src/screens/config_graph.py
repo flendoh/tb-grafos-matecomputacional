@@ -23,11 +23,15 @@ class ConfigGraph:
         else:
             self.matrix_group = dpg.add_group(horizontal=False, parent=user_data)
         
-        for i in range(size):
-            with dpg.group(horizontal=True, parent=self.matrix_group):
-                for j in range(size):
-                    input_id = dpg.add_input_int(label=f"({i},{j})", width=70,callback=self.update_preview)
-                    self.input_ids.append(input_id)
+        with dpg.table(header_row=False, parent=self.matrix_group, resizable=False):
+            for i in range(size):
+                dpg.add_table_column()  # agrega columnas para la tabla
+        
+            for i in range(size):
+                with dpg.table_row():  # crea una fila en la tabla
+                    for j in range(size):
+                        input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_preview, step=0)
+                        self.input_ids.append(input_id)
 
     def update_preview(self):
         self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
@@ -61,7 +65,6 @@ class ConfigGraph:
                 #self.update_preview()
                 #time.sleep(0.01)  # 0.01 segundos de delay
 
-
         self.update_preview()
     
     def gen_random_matrix(self):
@@ -86,7 +89,7 @@ class ConfigGraph:
         return matrix
 
     def create(self):
-        with dpg.window(label="Configuración", width=400, height=500) as main_window:
+        with dpg.window(label="Configuración", width=500, height=500) as main_window:
             #CONFIGURACION MATRIZ
             dpg.add_button(label="Generar una Matriz aleatoria de tamaño n*n [8<=n<=16]", callback=self.gen_random_matrix)
             dpg.add_text("Matriz")

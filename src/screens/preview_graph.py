@@ -46,7 +46,7 @@ class PreviewGraph:
     def save_img(self, start_node=0, end_node=0, node_size=500, graph_seed=100):
         import matplotlib
         matplotlib.use('Agg')
-
+    
         pos = nx.spring_layout(self.graph, seed=graph_seed)
         plt.figure(figsize=(9, 5))
 
@@ -64,7 +64,7 @@ class PreviewGraph:
             self.shortest_path = None
 
         image_path = self.file_path()
-        plt.savefig(image_path, transparent=True)
+        plt.savefig(image_path)
         plt.close()
 
         return image_path
