@@ -2,6 +2,7 @@ import dearpygui.dearpygui as dpg
 from screens.config_graph import ConfigGraph
 from screens.credits import Credits
 from screens.instructions import Instructions
+import os
 
 class App:
     def __init__(self, title="Problema del camino minimo", width=1480, height=820):
@@ -10,10 +11,9 @@ class App:
         self.height = height
         dpg.create_context()
         dpg.create_viewport(title=self.title, width=self.width, height=self.height)
-        try:
-            self.apply_styles()
-        except:
-            pass
+        
+        self.apply_styles()
+        
         dpg.setup_dearpygui()
     
     def apply_styles(self):
@@ -36,11 +36,14 @@ class App:
                 # Establecer colores de bordes
                 dpg.add_theme_color(dpg.mvThemeCol_Border, (0, 0, 0, 0))  # Color del borde
                 dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, (0, 0, 0, 0))  # Sombra del borde
+        try:
+            with dpg.font_registry():
+                path_file = os.path.join(os.path.dirname(__file__), 'assets', 'fonts', 'LibreFranklin-Thin.ttf')
+                default_font = dpg.add_font(path_file, 15)
+            dpg.bind_font(default_font)
+        except Exception as error:
+            print(error)
 
-        with dpg.font_registry():
-            default_font = dpg.add_font("./src/assets/fonts/LibreFranklin-Thin.ttf", 15)
-
-        dpg.bind_font(default_font)
         dpg.bind_theme(global_theme)
 
     def run(self):
