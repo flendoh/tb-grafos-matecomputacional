@@ -48,7 +48,7 @@ class App:
         dpg.start_dearpygui()
         dpg.destroy_context()
 
-    def create_menu(self):
+    def display_menu(self):
         with dpg.window(label="Menú", no_close=True, no_resize=True):
             dpg.add_button(label="Generar Grafo", width=200, callback=lambda: self.add_screen(ConfigGraph()))
             dpg.add_button(label="Enunciado", width=200, callback=lambda: self.add_screen(Instructions()))
@@ -60,7 +60,7 @@ class App:
 
 if __name__ == "__main__":
     app = App()
-    app.create_menu()
+    app.display_menu()
     app.run()
 
 
