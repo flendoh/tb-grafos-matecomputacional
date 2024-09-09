@@ -15,5 +15,5 @@ Integrantes:
         pass
 
     def create(self):
-        with dpg.window(label="Credítos"):
+        with dpg.window(label="Credítos", no_resize=True):
             dpg.add_text(self.texto)

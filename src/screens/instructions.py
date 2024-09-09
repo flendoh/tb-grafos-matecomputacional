@@ -5,10 +5,10 @@ class Instructions:
         pass
 
     def create(self):
-        with dpg.window(label="Enunciado"):
+        with dpg.window(label="Enunciado", no_resize=True):
             dpg.add_text("""Problema del camino mínimo
-Dado 𝑛 ∈ [8, 16] ingresado por el usuario, el programa debe generar aleatoriamente
-una matriz simétrica 𝑛 × 𝑛 (con elementos positivos) o solicitar el ingreso de cada
+Dado n pertenece [8, 16] ingresado por el usuario, el programa debe generar aleatoriamente
+una matriz simétrica n x n (con elementos positivos) o solicitar el ingreso de cada
 elemento de la matriz (según decisión del usuario). Además, debe mostrar el grafo
 etiquetado asociado a esta matriz y el camino mínimo que existe entre dos vértices
 seleccionados por el usuario. Todo el proceso, desde la generación de la matriz hasta
