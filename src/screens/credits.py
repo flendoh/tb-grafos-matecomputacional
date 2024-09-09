@@ -6,11 +6,11 @@ class Credits:
 Profesor: Jonathan Abrahan Sueros Zarate
 Grupo: 5
 Integrantes:
-- Cossar Sanchez, Eduardo Jose
-- Hallasi Saravia, Miguel Angel
-- Meza Puchoc, Raul Jean
-- Oliva Lopez, Fabian Alejandro
-- Rengifo Del Castillo, River Martín
+- Eduardo Jose Cossar Sanchez
+- Miguel Angel Hallasi Saravia
+- Raul Jean Meza Puchoc
+- Fabian Alejandro Oliva Lopez
+- River Martín Rengifo Del Castillo
 """
         pass
 
