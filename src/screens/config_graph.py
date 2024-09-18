@@ -109,5 +109,5 @@ class ConfigGraph:
             #CONFIGRUACION DISEÑO DEL GRAFO
             dpg.add_text("Diseño del Grafo")
 
-            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_preview)
+            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_preview, step=150)
             self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_preview)

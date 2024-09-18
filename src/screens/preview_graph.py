@@ -7,7 +7,7 @@ import uuid
 class PreviewGraph:
     def __init__(self):
         self.matrix = None
-        self.graph = nx.Graph()
+        self.graph = nx.DiGraph()
         self.parent = None
         self.image = None
         self.text_info = None
