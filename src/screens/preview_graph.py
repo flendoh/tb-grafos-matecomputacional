@@ -60,6 +60,18 @@ class PreviewGraph:
             path_edges = list(zip(self.shortest_path, self.shortest_path[1:]))
             nx.draw_networkx_edges(self.graph, pos, edgelist=path_edges, edge_color='red', width=2)
             nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=node_size)
+
+            # Obtener nodo padre y distancia recurrente con Dijkstra
+            predecessors, distances = nx.dijkstra_predecessor_and_distance(self.graph, source=start_node)
+            
+            distance_labels = {node: f"[{distances[node]}, {predecessors[node][0] if predecessors[node] else '-'}]" 
+                            for node in self.graph.nodes if node in distances}
+            
+            pos_labels = {node: (x, y + 0.1) for node, (x, y) in pos.items()}
+            
+            nx.draw_networkx_labels(self.graph, pos_labels, labels=distance_labels, font_color='black', font_size=10)
+        
+            
         else:
             self.shortest_path = None
 
@@ -68,7 +80,6 @@ class PreviewGraph:
         plt.close()
 
         return image_path
-
     
     def update(self, matrix, start_node=0, end_node=0, node_size=500, graph_seed=100):
         self.matrix = matrix
@@ -86,7 +97,6 @@ class PreviewGraph:
         else:
             self.image = dpg.add_image(tag, parent=self.parent)
         
-
     def display_graph(self):
         with dpg.window(label="Grafo asociado a la matriz", width=900, height=550) as self.parent:
             self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
