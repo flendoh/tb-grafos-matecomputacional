@@ -91,7 +91,7 @@ class ConfigGraph:
     def create(self):
         with dpg.window(label="Configuración", width=500, height=500) as main_window:
             #CONFIGURACION MATRIZ
-            dpg.add_button(label="Generar una matriz simetrica aleatoria de tamaño n [8<=n<=16]", callback=self.gen_random_matrix)
+            dpg.add_button(label="Generar una matriz simétrica aleatoria de tamaño n [8<=n<=16]", callback=self.gen_random_matrix)
             dpg.add_text("Matriz")
             self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
             dpg.add_text("Elementos")
