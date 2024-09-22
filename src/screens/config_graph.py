@@ -1,7 +1,6 @@
 import dearpygui.dearpygui as dpg
 from .preview_graph import PreviewGraph
 import random
-import time
 class ConfigGraph:
     def __init__(self):
         self.size_array = None
@@ -13,25 +12,31 @@ class ConfigGraph:
         self.graph_seed = None
 
     def create_matrix(self, sender=None, app_data=None, user_data=None):
+        min_value = 8
+        max_value = 16
         size = dpg.get_value(self.size_array)
-        self.input_ids = []
 
-        if self.matrix_group is not None:
-            children = dpg.get_item_children(self.matrix_group, 1)
-            for child in children:
-                dpg.delete_item(child)
+        if min_value<=dpg.get_value(self.size_array)<=max_value:
+            self.input_ids = []
+
+            if self.matrix_group is not None:
+                children = dpg.get_item_children(self.matrix_group, 1)
+                for child in children:
+                    dpg.delete_item(child)
+            else:
+                self.matrix_group = dpg.add_group(horizontal=False, parent=user_data)
+            
+            with dpg.table(header_row=False, parent=self.matrix_group, resizable=False):
+                for i in range(size):
+                    dpg.add_table_column()  # agrega columnas para la tabla
+            
+                for i in range(size):
+                    with dpg.table_row():  # crea una fila en la tabla
+                        for j in range(size):
+                            input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_preview, step=0)
+                            self.input_ids.append(input_id)
         else:
-            self.matrix_group = dpg.add_group(horizontal=False, parent=user_data)
-        
-        with dpg.table(header_row=False, parent=self.matrix_group, resizable=False):
-            for i in range(size):
-                dpg.add_table_column()  # agrega columnas para la tabla
-        
-            for i in range(size):
-                with dpg.table_row():  # crea una fila en la tabla
-                    for j in range(size):
-                        input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_preview, step=0)
-                        self.input_ids.append(input_id)
+            dpg.set_value(self.size_array, 8)
 
     def update_preview(self):
         self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
@@ -68,11 +73,6 @@ class ConfigGraph:
         self.update_preview()
     
     def gen_random_matrix(self):
-        min_range = 8
-        max_range = 16
-
-        random_size = random.randint(min_range, max_range)
-        dpg.set_value(self.size_array, random_size)
         self.create_matrix()
         self.fill_matrix()
     
@@ -91,9 +91,9 @@ class ConfigGraph:
     def create(self):
         with dpg.window(label="Configuración", width=500, height=500) as main_window:
             #CONFIGURACION MATRIZ
-            dpg.add_button(label="Generar una matriz simétrica aleatoria de tamaño n [8<=n<=16]", callback=self.gen_random_matrix)
+            dpg.add_button(label="Generar una matriz simétrica aleatoria", callback=self.gen_random_matrix)
             dpg.add_text("Matriz")
-            self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
+            self.size_array = dpg.add_input_int(label="Tamaño: n [8<=n<=16]", width=100, default_value=8, callback=self.create_matrix)
             dpg.add_text("Elementos")
 
             #MATRIZ

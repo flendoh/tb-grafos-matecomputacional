@@ -98,5 +98,5 @@ class PreviewGraph:
             self.image = dpg.add_image(tag, parent=self.parent)
         
     def display_graph(self):
-        with dpg.window(label="Grafo asociado a la matriz", width=900, height=550) as self.parent:
+        with dpg.window(label="Grafo asociado a la matriz", width=900, height=550, pos=[500, 0]) as self.parent:
             self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
