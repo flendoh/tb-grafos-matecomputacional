@@ -87,23 +87,34 @@ class ConfigGraph:
 
     def create(self):
         with dpg.child_window(width=300) as main_window:
-            #CONFIGURACION MATRIZ
-            dpg.add_button(label="Generar una matriz simétrica aleatoria", callback=self.gen_random_matrix)
-            dpg.add_text("Matriz")
-            self.size_array = dpg.add_input_int(label="Tamaño: n [8<=n<=16]", width=100, default_value=8, callback=self.create_matrix)
-            dpg.add_text("Elementos")
+            with dpg.group():
+                dpg.add_text("Configuración de la Matriz")
+                dpg.add_separator()
+                
+                dpg.add_button(label="Generar matriz simétrica aleatoria", callback=self.gen_random_matrix, width=-1)
+                
+                with dpg.group(horizontal=True):
+                    self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
+                    dpg.add_text("[8 <= n <= 16]")
+                
+                dpg.add_text("Elementos de la Matriz")
+                self.create_matrix(user_data=main_window)
 
-            #MATRIZ
-            self.create_matrix(user_data=main_window)
+            dpg.add_spacer(height=10)
 
-            #CAMINO CORTO
-            dpg.add_text("Encontrar el camino mínimo entre dos nodos (Dijkstra)")
-            self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_graph_preview)
-            #dpg.add_same_line()
-            self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_graph_preview, )
+            with dpg.group():
+                dpg.add_text("Camino Mínimo (Dijkstra)")
+                dpg.add_separator()
+                
+                with dpg.group():
+                    self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_graph_preview)
+                    self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_graph_preview)
 
-            #CONFIGRUACION DISEÑO DEL GRAFO
-            dpg.add_text("Diseño del Grafo")
+            dpg.add_spacer(height=10)
 
-            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_graph_preview, step=150)
-            self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_graph_preview)
+            with dpg.group():
+                dpg.add_text("Diseño del Grafo")
+                dpg.add_separator()
+                
+                self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_graph_preview, step=150)
+                self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_graph_preview)

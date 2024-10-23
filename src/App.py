@@ -8,7 +8,7 @@ from themes.font import *
 from themes.theme import *
 
 class App:
-    def __init__(self, title="Problema del camino minimo", width=1250, height=600):
+    def __init__(self, title="Problema del camino minimo", width=1250, height=650):
         self.title = title
         self.width = width
         self.height = height
