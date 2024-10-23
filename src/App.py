@@ -7,7 +7,7 @@ from themes.font import *
 from themes.theme import *
 
 class App:
-    def __init__(self, title="Problema del camino minimo", width=1480, height=820):
+    def __init__(self, title="Problema del camino minimo", width=900, height=600):
         self.title = title
         self.width = width
         self.height = height
@@ -24,19 +24,32 @@ class App:
         dpg.start_dearpygui()
         dpg.destroy_context()
 
-    def display_menu(self):
-        with dpg.window(label="Menú", no_close=True, no_resize=True):
-            dpg.add_button(label="Generar Grafo", width=200, callback=lambda: self.add_screen(ConfigGraph()))
-            dpg.add_button(label="Enunciado", width=200, callback=lambda: self.add_screen(Instructions()))
-            dpg.add_button(label="Credítos", width=200, callback=lambda: self.add_screen(Credits()))
-            dpg.add_button(label="Salir", width=200, callback=dpg.stop_dearpygui)
+    def main_window_setup(self):
+        with dpg.window() as self.main_window:
+            self.display_menu_bar()
+            with dpg.group(horizontal=True):
+                with dpg.child_window(width=300) as self.graph_config:
+                    pass
+                with dpg.child_window() as self.graph_preview:
+                    pass
+        dpg.set_primary_window(self.main_window, True)
+
+    def display_menu_bar(self):
+        with dpg.menu_bar():
+            with dpg.menu(label="Archivo"):
+                dpg.add_menu_item(label="Resetear Grafo")
+                dpg.add_menu_item(label="Salir", callback=dpg.stop_dearpygui)
+            with dpg.menu(label="Acerca de"):
+                dpg.add_menu_item(label="Enunciado")
+                dpg.add_menu_item(label="Creditos")
+
 
     def add_screen(self, screen):
         screen.create()
 
 if __name__ == "__main__":
     app = App()
-    app.display_menu()
+    app.main_window_setup()
     app.run()
 
 
