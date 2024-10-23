@@ -15,5 +15,5 @@ Integrantes:
         pass
 
     def create(self):
-        with dpg.window(label="Credítos", no_resize=True):
+        with dpg.window(label="Creditos", modal=True, show=True, tag="credits_popup", no_resize=True, pos=(500, 200), on_close=lambda: dpg.delete_item("credits_popup")):
             dpg.add_text(self.texto)

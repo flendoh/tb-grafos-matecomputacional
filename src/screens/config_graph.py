@@ -1,15 +1,15 @@
 import dearpygui.dearpygui as dpg
-from .preview_graph import PreviewGraph
+from screens.preview_graph import PreviewGraph
 import random
 class ConfigGraph:
-    def __init__(self):
+    def __init__(self, graph_preview: PreviewGraph):
         self.size_array = None
         self.matrix_group = None
-        self.preview_window = PreviewGraph()
         self.start_node = None
         self.end_node = None
         self.node_size = None
         self.graph_seed = None
+        self.graph_preview: PreviewGraph = graph_preview
 
     def create_matrix(self, sender=None, app_data=None, user_data=None):
         min_value = 8
@@ -33,13 +33,13 @@ class ConfigGraph:
                 for i in range(size):
                     with dpg.table_row():  # crea una fila en la tabla
                         for j in range(size):
-                            input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_preview, step=0)
+                            input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_graph_preview, step=0)
                             self.input_ids.append(input_id)
         else:
             dpg.set_value(self.size_array, 8)
 
-    def update_preview(self):
-        self.preview_window.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
+    def update_graph_preview(self):
+        self.graph_preview.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
 
     def clear_matrix(self):
         for input_id in self.input_ids:
@@ -67,10 +67,7 @@ class ConfigGraph:
                 dpg.set_value(reverse_input_id, random_value)
                 current_fill+=1
 
-                #self.update_preview()
-                #time.sleep(0.01)  # 0.01 segundos de delay
-
-        self.update_preview()
+        self.update_graph_preview()
     
     def gen_random_matrix(self):
         self.create_matrix()
@@ -89,7 +86,7 @@ class ConfigGraph:
         return matrix
 
     def create(self):
-        with dpg.window(label="Configuración", width=500, height=500) as main_window:
+        with dpg.child_window(width=300) as main_window:
             #CONFIGURACION MATRIZ
             dpg.add_button(label="Generar una matriz simétrica aleatoria", callback=self.gen_random_matrix)
             dpg.add_text("Matriz")
@@ -98,16 +95,15 @@ class ConfigGraph:
 
             #MATRIZ
             self.create_matrix(user_data=main_window)
-            self.preview_window.create(matrix=self.get_matrix())
 
             #CAMINO CORTO
             dpg.add_text("Encontrar el camino mínimo entre dos nodos (Dijkstra)")
-            self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_preview)
+            self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_graph_preview)
             #dpg.add_same_line()
-            self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_preview, )
+            self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_graph_preview, )
 
             #CONFIGRUACION DISEÑO DEL GRAFO
             dpg.add_text("Diseño del Grafo")
 
-            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_preview, step=150)
-            self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_preview)
+            self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_graph_preview, step=150)
+            self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_graph_preview)

@@ -13,9 +13,9 @@ class PreviewGraph:
         self.text_info = None
         self.shortest_path = None
 
-    def create(self, matrix):
-        self.matrix = matrix
-        self.display_graph()
+    def create(self):
+        with dpg.child_window() as self.parent:
+            self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
     
     def add_nodes_and_edges(self):
         self.graph.clear()
@@ -103,6 +103,3 @@ class PreviewGraph:
         else:
             self.image = dpg.add_image(tag, parent=self.parent)
         
-    def display_graph(self):
-        with dpg.window(label="Grafo asociado a la matriz", width=900, height=550, pos=[500, 0]) as self.parent:
-            self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
