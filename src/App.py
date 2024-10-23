@@ -20,9 +20,7 @@ class App:
         self.height = height
         dpg.create_context()
         dpg.create_viewport(title=self.title, width=self.width, height=self.height)
-        
         self.apply_styles()
-        
         dpg.setup_dearpygui()
     
     def apply_styles(self):

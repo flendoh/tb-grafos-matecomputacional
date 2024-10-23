@@ -50,7 +50,13 @@ class PreviewGraph:
         pos = nx.spring_layout(self.graph, seed=graph_seed)
         plt.figure(figsize=(9, 5))
 
-        nx.draw(self.graph, pos, with_labels=True, node_color='skyblue', node_size=node_size, edge_color='gray')
+        nx.draw(self.graph, pos, with_labels=True, 
+                node_color='#98c6ea',
+                node_size=node_size, 
+                edge_color='black',  
+                width=1.5,                  
+                edgecolors='#1270c0',
+                linewidths=2)
         labels = nx.get_edge_attributes(self.graph, 'weight')
         nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
         
@@ -59,7 +65,7 @@ class PreviewGraph:
             #Resaltar el camino más corto en otro color
             path_edges = list(zip(self.shortest_path, self.shortest_path[1:]))
             nx.draw_networkx_edges(self.graph, pos, edgelist=path_edges, edge_color='red', width=2)
-            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='orange', node_size=node_size)
+            nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='#f2ad77', node_size=node_size, linewidths=2, edgecolors='#ed652a')
 
             # Obtener nodo padre y distancia recurrente con Dijkstra
             predecessors, distances = nx.dijkstra_predecessor_and_distance(self.graph, source=start_node)
