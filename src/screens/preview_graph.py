@@ -14,8 +14,12 @@ class PreviewGraph:
         self.shortest_path = None
 
     def create(self):
-        with dpg.child_window() as self.parent:
-            self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n")
+        with dpg.group(horizontal=False):
+            with dpg.child_window(height=495) as self.parent:
+                dpg.add_text("Grafo asociado a la matriz de adyacencia")
+                dpg.add_separator()
+            with dpg.child_window():
+                self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n", wrap=900)
     
     def add_nodes_and_edges(self):
         self.graph.clear()
@@ -48,7 +52,7 @@ class PreviewGraph:
         matplotlib.use('Agg')
     
         pos = nx.spring_layout(self.graph, seed=graph_seed)
-        plt.figure(figsize=(9, 5))
+        plt.figure(figsize=(9, 4.5))
 
         nx.draw(self.graph, pos, with_labels=True, 
                 node_color='#98c6ea',
