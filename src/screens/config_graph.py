@@ -12,31 +12,27 @@ class ConfigGraph:
         self.graph_preview: PreviewGraph = graph_preview
 
     def create_matrix(self, sender=None, app_data=None, user_data=None):
-        min_value = 8
-        max_value = 16
+
         size = dpg.get_value(self.size_array)
 
-        if min_value<=dpg.get_value(self.size_array)<=max_value:
-            self.input_ids = []
+        self.input_ids = []
 
-            if self.matrix_group is not None:
-                children = dpg.get_item_children(self.matrix_group, 1)
-                for child in children:
-                    dpg.delete_item(child)
-            else:
-                self.matrix_group = dpg.add_group(horizontal=False, parent=user_data)
-            
-            with dpg.table(header_row=False, parent=self.matrix_group, resizable=False):
-                for i in range(size):
-                    dpg.add_table_column()  # agrega columnas para la tabla
-            
-                for i in range(size):
-                    with dpg.table_row():  # crea una fila en la tabla
-                        for j in range(size):
-                            input_id = dpg.add_input_int(label=f"({i},{j})", width=30,callback=self.update_graph_preview, step=0)
-                            self.input_ids.append(input_id)
+        if self.matrix_group is not None:
+            children = dpg.get_item_children(self.matrix_group, 1)
+            for child in children:
+                dpg.delete_item(child)
         else:
-            dpg.set_value(self.size_array, 8)
+            self.matrix_group = dpg.add_group(horizontal=False, parent=user_data)
+        
+        with dpg.table(header_row=False, parent=self.matrix_group, resizable=False):
+            for i in range(size):
+                dpg.add_table_column()  # agrega columnas para la tabla
+            
+            for i in range(size):
+                with dpg.table_row():  # crea una fila en la tabla
+                    for j in range(size):
+                        input_id = dpg.add_input_int(min_value=0, min_clamped=True, label=f"({i},{j})", width=30,callback=self.update_graph_preview, step=0)
+                        self.input_ids.append(input_id)
 
     def update_graph_preview(self):
         self.graph_preview.update(self.get_matrix(), dpg.get_value(self.start_node), dpg.get_value(self.end_node), dpg.get_value(self.node_size), dpg.get_value(self.graph_seed))
@@ -94,7 +90,7 @@ class ConfigGraph:
                 dpg.add_button(label="Generar matriz simétrica aleatoria", callback=self.gen_random_matrix, width=-1)
                 
                 with dpg.group(horizontal=True):
-                    self.size_array = dpg.add_input_int(label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
+                    self.size_array = dpg.add_input_int(min_value=8, min_clamped=True, max_value=16, max_clamped=True, label="Tamaño", width=100, default_value=8, callback=self.create_matrix)
                     dpg.add_text("[8 <= n <= 16]")
                 
                 dpg.add_text("Elementos de la Matriz")
@@ -107,8 +103,8 @@ class ConfigGraph:
                 dpg.add_separator()
                 
                 with dpg.group():
-                    self.start_node = dpg.add_input_int(label="Nodo Inicio", width=100, callback=self.update_graph_preview)
-                    self.end_node = dpg.add_input_int(label="Nodo Final", width=100, callback=self.update_graph_preview)
+                    self.start_node = dpg.add_input_int(min_value=0, min_clamped=True,label="Nodo Inicio", width=100, callback=self.update_graph_preview)
+                    self.end_node = dpg.add_input_int(min_value=0, min_clamped=True,label="Nodo Final", width=100, callback=self.update_graph_preview)
 
             dpg.add_spacer(height=10)
 
