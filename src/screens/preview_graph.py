@@ -1,17 +1,20 @@
 import dearpygui.dearpygui as dpg
 import networkx as nx
 import matplotlib.pyplot as plt
+from screens.solution_table import SolutionTable
 import os
 import uuid
 
 class PreviewGraph:
     def __init__(self):
+        self.solution_table = SolutionTable()
         self.matrix = None
         self.graph = nx.DiGraph()
         self.parent = None
         self.image = None
         self.text_info = None
         self.shortest_path = None
+        self.solution_table_button = None
 
     def create(self):
         with dpg.group(horizontal=False):
@@ -20,6 +23,9 @@ class PreviewGraph:
                 dpg.add_separator()
             with dpg.child_window():
                 self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n", wrap=900)
+                dpg.add_spacer(height=10)
+                dpg.add_separator()
+                self.solution_table_button = dpg.add_button(label="Mostrar tabla de solución", callback=self.show_solution_table, enabled=False)
     
     def add_nodes_and_edges(self):
         self.graph.clear()
@@ -45,7 +51,10 @@ class PreviewGraph:
         with dpg.texture_registry():
             dpg.add_static_texture(width, height, first_image, tag=texture_tag)
         
-        return texture_tag       
+        return texture_tag
+    
+    def show_solution_table(self):
+        self.solution_table.create(self.dijkstra_result)
     
     def save_img(self, start_node=0, end_node=0, node_size=500, graph_seed=100):
         import matplotlib
@@ -72,7 +81,8 @@ class PreviewGraph:
             nx.draw_networkx_nodes(self.graph, pos, nodelist=self.shortest_path, node_color='#f2ad77', node_size=node_size, linewidths=2, edgecolors='#ed652a')
 
             # Obtener nodo padre y distancia recurrente con Dijkstra
-            predecessors, distances = nx.dijkstra_predecessor_and_distance(self.graph, source=start_node)
+            self.dijkstra_result = nx.dijkstra_predecessor_and_distance(self.graph, source=start_node)
+            predecessors, distances = self.dijkstra_result
             
             distance_labels = {node: f"[{distances[node]}, {predecessors[node][0] if predecessors[node] else '-'}]" 
                             for node in self.graph.nodes if node in distances}
@@ -99,8 +109,10 @@ class PreviewGraph:
 
         if self.shortest_path:
             dpg.set_value(self.text_info, f"Elementos del grafo:\n{str(self.graph.edges)}\nCamino más corto de {start_node} a {end_node}:\n {self.shortest_path}")
+            dpg.enable_item(self.solution_table_button)
         else:
             dpg.set_value(self.text_info, f"Elementos del grafo:\n{str(self.graph.edges)}")
+            dpg.disable_item(self.solution_table_button)
 
         if self.image !=None:
             dpg.configure_item(self.image, texture_tag=tag)

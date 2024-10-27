@@ -46,8 +46,7 @@ class ConfigGraph:
         size = dpg.get_value(self.size_array)
         max_range = ((size**2)-size)/2
         current_fill = 0
-        t = random.randint(1, int(max_range))
-        while(current_fill<t):
+        while(current_fill<max_range):
             input_id = random.choice(self.input_ids) #seleccionamos aleatoriamente un elemento de los inputs
             label = dpg.get_item_label(input_id).replace("(", "").replace(")", "")
             node = label.split(',')
