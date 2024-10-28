@@ -15,6 +15,8 @@ class PreviewGraph:
         self.text_info = None
         self.shortest_path = None
         self.solution_table_button = None
+        self.start_node = None
+        self.end_node = None
 
     def create(self):
         with dpg.group(horizontal=False):
@@ -25,7 +27,7 @@ class PreviewGraph:
                 self.text_info = dpg.add_text(f"Elementos del grafo:\n{str(self.graph.edges)}\n", wrap=900)
                 dpg.add_spacer(height=10)
                 dpg.add_separator()
-                self.solution_table_button = dpg.add_button(label="Mostrar tabla de solución", callback=self.show_solution_table, enabled=False)
+                self.solution_table_button = dpg.add_button(label="Demostración de Dijkstra", callback=self.show_solution_table, enabled=False)
     
     def add_nodes_and_edges(self):
         self.graph.clear()
@@ -54,7 +56,7 @@ class PreviewGraph:
         return texture_tag
     
     def show_solution_table(self):
-        self.solution_table.create(self.dijkstra_result)
+        SolutionTable().create(self.graph, self.start_node, self.end_node)
     
     def save_img(self, start_node=0, end_node=0, node_size=500, graph_seed=100):
         import matplotlib
@@ -72,6 +74,8 @@ class PreviewGraph:
                 linewidths=2)
         labels = nx.get_edge_attributes(self.graph, 'weight')
         nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
+        self.start_node = start_node
+        self.end_node = end_node
         
         if start_node!=end_node and 0<=start_node<len(self.matrix) and 0<=end_node<len(self.matrix):
             self.shortest_path = nx.shortest_path(self.graph, source=start_node, target=end_node, weight='weight')
