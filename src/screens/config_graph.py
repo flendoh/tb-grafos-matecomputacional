@@ -65,6 +65,8 @@ class ConfigGraph:
         self.update_graph_preview()
     
     def gen_random_matrix(self):
+        dpg.set_value(self.start_node, 0)
+        dpg.set_value(self.end_node, 0)
         self.create_matrix()
         self.fill_matrix()
     
@@ -111,5 +113,5 @@ class ConfigGraph:
                 dpg.add_text("Diseño del Grafo")
                 dpg.add_separator()
                 
-                self.node_size = dpg.add_input_int(label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_graph_preview, step=150)
+                self.node_size = dpg.add_input_int(min_value=1, min_clamped=True, label="Tamaño del Nodo", default_value=500, width=100, callback=self.update_graph_preview, step=150)
                 self.graph_seed = dpg.add_input_int(label="Seed", default_value=random.randint(1, 999), width=100, callback=self.update_graph_preview)
